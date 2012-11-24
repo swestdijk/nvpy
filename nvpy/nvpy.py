@@ -93,6 +93,7 @@ class Config:
                     'list_font_size' : '10',
                     'layout' : 'horizontal',
                     'print_columns' : '0',
+                    'export_tags' : '0',
                     'background_color' : 'white',
                     'sn_username' : '',
                     'sn_password' : '',
@@ -148,6 +149,7 @@ class Config:
 
         self.layout = cp.get(cfg_sec, 'layout')
         self.print_columns = cp.getint(cfg_sec, 'print_columns')
+        self.export_tags = cp.getint(cfg_sec, 'export_tags')
 
         self.background_color = cp.get(cfg_sec, 'background_color')
 

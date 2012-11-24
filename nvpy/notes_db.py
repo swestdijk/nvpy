@@ -81,6 +81,12 @@ class NotesDB(utils.SubjectMixin):
                             with codecs.open(tfn, mode='rb', encoding='utf-8') as f:  
                                 c = f.read()
 
+                            if self.config.export_tags:
+                                c,tags = utils.get_text_note_tags(c)
+                                logging.debug('Found tags %s' % (tags,))
+                                n['tags'] = tags.split(',')
+
+                            
                             n['content'] = c
                             n['modifydate'] = os.path.getmtime(tfn)
                     else:
@@ -128,6 +134,12 @@ class NotesDB(utils.SubjectMixin):
                 else:
                     nk = self.create_note(c)
                     nn = os.path.splitext(os.path.basename(fn))[0]
+
+                    if self.config.export_tags:
+                        c,tags = utils.get_text_note_tags(c)
+                        logging.debug('Found tags %s' % (tags,))
+                        self.notes[nk]['tags'] = tags.split(',')
+
                     if nn != utils.get_note_title(self.notes[nk]):
                         self.notes[nk]['content'] = nn + "\n\n" + c
 
@@ -460,6 +472,10 @@ class NotesDB(utils.SubjectMixin):
                 try:
                     with codecs.open(fn, mode='wb', encoding='utf-8') as f:  
                         c = note.get('content')
+                        if self.config.export_tags:
+                            tags= ','.join(note.get('tags'))
+                            c += "\n\nTags: " + tags + "\n"
+
                         if isinstance(c, str):
                             c = unicode(c, 'utf-8')
                         else:

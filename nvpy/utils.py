@@ -48,6 +48,18 @@ def get_note_title_file(note):
     else:
         return ''
 
+note_tags_re = re.compile('\n\nTags:\s*(.*)\n')
+def get_text_note_tags(content):
+    mo = note_tags_re.search(content)
+    if mo:
+        tags = mo.groups()[0]
+    else:
+        tags = ''
+    
+    content = re.sub('\n\nTags:\s*.*\n', '', content)
+    
+    return content,tags
+
 def human_date(timestamp):
     """
     Given a timestamp, return pretty human format representation.
